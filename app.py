@@ -39,17 +39,8 @@ def load_models():
 
 model, scaler = load_models()
 
-#  SIDEBAR (Team & Project Info)
-with st.sidebar:
-    st.image("https://cdn-icons-png.flaticon.com/512/1163/1163624.png", width=100)
-    st.markdown("## ☁️ Rain Predicter AI")
-    st.info("A state-of-the-art Machine Learning Dashboard powered by LightGBM to forecast rainfall.")
-    
-    st.divider()
-    st.caption("Built for Internship Submission\n\n© July 2026")
-
 #  MAIN DASHBOARD UI
-st.markdown('<p class="main-title">☁️ Rain Prediction AI Dashboard</p>', unsafe_allow_html=True)
+st.markdown('<p class="main-title">☁️ Rain Prediction AI </p>', unsafe_allow_html=True)
 st.markdown('<p class="sub-title">Adjust today\'s weather parameters to generate a highly accurate forecast for tomorrow</p>', unsafe_allow_html=True)
 st.divider()
 
