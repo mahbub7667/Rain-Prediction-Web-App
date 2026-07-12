@@ -30,16 +30,9 @@ def load_models():
 
 model, scaler = load_models()
 
-#  SIDEBAR (Project Info)
-st.sidebar.image("https://cdn-icons-png.flaticon.com/512/1163/1163624.png", width=120)
-st.sidebar.markdown("## 🌧️ About RainCast AI")
-st.sidebar.info(
-    "This Web App uses an advanced **LightGBM Machine Learning Model** to predict whether it will rain tomorrow in Australia based on today's weather observations."
-)
-
 # MAIN DASHBOARD UI
 
-st.markdown('<p class="main-title">☁️ Rain Prediction AI Dashboard ☀️</p>', unsafe_allow_html=True)
+st.markdown('<p class="main-title">☁️ Rain Prediction AI</p>', unsafe_allow_html=True)
 st.markdown('<p class="sub-title">Enter today\'s weather metrics below to get tomorrow\'s forecast</p>', unsafe_allow_html=True)
 st.divider()
 
@@ -116,6 +109,4 @@ if predict_clicked:
             st.snow()  # Cool snow/rain effect
         else:
             st.markdown('<div class="sun-box">☀️ NO RAIN! It will be a clear and sunny day tomorrow</div>', unsafe_allow_html=True)
-            st.balloons()
-            st.markdown('<div class="sun-box">☀️ NO RAIN! It will be a clear and sunny day tomorrow. 😎</div>', unsafe_allow_html=True)
-            st.balloons() # Cool celebration effect
+            st.balloons() # Ballon Effect
