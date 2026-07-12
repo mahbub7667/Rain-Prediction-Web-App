@@ -2,16 +2,25 @@ import streamlit as st
 import pandas as pd
 import pickle
 
-# PAGE CONFIGURATION & CUSTOM CSS
-st.set_page_config(page_title="RainCast AI", page_icon="⛈️", layout="wide")
+# PAGE CONFIGURATION & CUSTOM CSS 
+st.set_page_config(page_title="Rain Predicter AI ", page_icon="⛈️", layout="wide", initial_sidebar_state="expanded")
 
-# Customizing the UI with CSS
+# Customizing the UI 
 st.markdown("""
 <style>
-    .main-title { font-size: 45px !important; font-weight: 800; color: #1E90FF; text-align: center; margin-bottom: -10px;}
-    .sub-title { font-size: 20px; color: #808080; text-align: center; margin-bottom: 30px;}
-    .rain-box { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); padding: 25px; border-radius: 15px; color: white; text-align: center; font-size: 28px; font-weight: bold; box-shadow: 0 4px 8px rgba(0,0,0,0.2);}
-    .sun-box { background: linear-gradient(135deg, #f2994a 0%, #f2c94c 100%); padding: 25px; border-radius: 15px; color: white; text-align: center; font-size: 28px; font-weight: bold; box-shadow: 0 4px 8px rgba(0,0,0,0.2);}
+    /* Main Titles */
+    .main-title { font-size: 48px !important; font-weight: 800; color: #1E90FF; text-align: center; margin-bottom: -15px; letter-spacing: 1px;}
+    .sub-title { font-size: 18px; color: #808080; text-align: center; margin-bottom: 40px; font-weight: 500;}
+    
+    /* P Output Boxes */
+    .rain-box { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); padding: 30px; border-radius: 20px; color: white; text-align: center; box-shadow: 0 10px 20px rgba(0,0,0,0.3); transition: transform 0.3s;}
+    .rain-box:hover { transform: translateY(-5px); }
+    .sun-box { background: linear-gradient(135deg, #f2994a 0%, #f2c94c 100%); padding: 30px; border-radius: 20px; color: white; text-align: center; box-shadow: 0 10px 20px rgba(0,0,0,0.3); transition: transform 0.3s;}
+    .sun-box:hover { transform: translateY(-5px); }
+    
+    /* Result Text Styling */
+    .result-text { font-size: 32px; font-weight: 800; margin-bottom: 5px; }
+    .result-subtext { font-size: 16px; font-weight: 400; opacity: 0.9; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -30,13 +39,21 @@ def load_models():
 
 model, scaler = load_models()
 
-# MAIN DASHBOARD UI
+#  SIDEBAR (Team & Project Info)
+with st.sidebar:
+    st.image("https://cdn-icons-png.flaticon.com/512/1163/1163624.png", width=100)
+    st.markdown("## ☁️ Rain Predicter AI")
+    st.info("A state-of-the-art Machine Learning Dashboard powered by LightGBM to forecast rainfall.")
+    
+    st.divider()
+    st.caption("Built for Internship Submission\n\n© July 2026")
 
-st.markdown('<p class="main-title">☁️ Rain Prediction AI</p>', unsafe_allow_html=True)
-st.markdown('<p class="sub-title">Enter today\'s weather metrics below to get tomorrow\'s forecast</p>', unsafe_allow_html=True)
+#  MAIN DASHBOARD UI
+st.markdown('<p class="main-title">☁️ Rain Prediction AI Dashboard</p>', unsafe_allow_html=True)
+st.markdown('<p class="sub-title">Adjust today\'s weather parameters to generate a highly accurate forecast for tomorrow</p>', unsafe_allow_html=True)
 st.divider()
 
-# Creating 3 beautiful columns for inputs
+# Creating 3 columns for inputs
 col1, col2, col3 = st.columns(3)
 
 with col1:
@@ -63,14 +80,17 @@ with col3:
     pressure9am = st.slider("Pressure at 9 AM (hPa)", 980.0, 1040.0, 1007.7)
     pressure3pm = st.slider("Pressure at 3 PM (hPa)", 980.0, 1040.0, 1007.1)
 
-st.divider()
+st.write("") # Spacer
 
-# PREDICTION BUTTON & RESULT
+#  PREDICTION BUTTON & RESULT
 # Big, full-width button
-predict_clicked = st.button("🔮 Predict Tomorrow's Weather", use_container_width=True, type="primary")
+predict_clicked = st.button("🔮 Generate Tomorrow's Forecast", use_container_width=True, type="primary")
 
 if predict_clicked:
     if model is not None and scaler is not None:
+        # Professional UI Notification
+        st.toast('Analyzing weather patterns...', icon='⏳')
+        
         # Preparing the input dictionary perfectly aligned with training data
         input_data = {
             'Location': [0], 
@@ -103,10 +123,21 @@ if predict_clicked:
         # Predict
         prediction = model.predict(new_data_scaled)
         
+        st.toast('Prediction Generated!', icon='✅')
+        st.divider()
+        
         # Result
         if prediction[0] == 1:
-            st.markdown('<div class="rain-box">🌧️ YES! It will Rain Tomorrow</div>', unsafe_allow_html=True)
-            st.snow()  # Cool snow/rain effect
+            st.markdown("""
+            <div class="rain-box">
+                <div class="result-text">🌧️ HIGH PROBABILITY OF RAIN</div>
+                <div class="result-subtext">Tomorrow's conditions are highly favorable for rainfall.</div>
+            </div>
+            """, unsafe_allow_html=True)
         else:
-            st.markdown('<div class="sun-box">☀️ NO RAIN! It will be a clear and sunny day tomorrow</div>', unsafe_allow_html=True)
-            st.balloons() # Ballon Effect
+            st.markdown("""
+            <div class="sun-box">
+                <div class="result-text">☀️ CLEAR & DRY DAY</div>
+                <div class="result-subtext">No significant rainfall is expected tomorrow.</div>
+            </div>
+            """, unsafe_allow_html=True)
